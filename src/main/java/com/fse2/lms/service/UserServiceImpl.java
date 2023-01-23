@@ -10,17 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
 
-    public void addUser(UserRequestDto userRequestDto) throws UserAlreadyExistsException{
+    public void addUser(UserRequestDto userRequestDto) throws UserAlreadyExistsException {
 
         LOG.info("Checking if the user email Id exists in database");
-        if(userRepository.existsUserByUserEmailId(userRequestDto.getUserEmailId())){
+        if (userRepository.existsUserByUserEmailId(userRequestDto.getUserEmailId())) {
             LOG.info("User email Id already exists");
             throw new UserAlreadyExistsException("User already exists");
         }

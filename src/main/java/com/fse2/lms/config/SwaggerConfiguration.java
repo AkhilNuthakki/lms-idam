@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class SwaggerConfiguration {
 
     @Bean
-    public GroupedOpenApi api(){
+    public GroupedOpenApi api() {
         return GroupedOpenApi.builder()
                 .group("LMS-V1.0")
                 .pathsToMatch("/**")
@@ -21,7 +21,7 @@ public class SwaggerConfiguration {
     }
 
     @Bean
-    private OpenAPI apiInfo(){
+    public OpenAPI apiInfo() {
         return new OpenAPI()
                 .info(new Info().title("Learning Management System User Registration API documentation")
                         .description("This API contains registration of users"));

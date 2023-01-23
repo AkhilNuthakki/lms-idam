@@ -26,7 +26,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(value= "/register")
+    @PostMapping(value = "/register")
     @Operation(summary = "POST /register", description = "Register User")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User added"),
@@ -39,7 +39,6 @@ public class UserController {
         return new ResponseEntity<>("User added", HttpStatus.CREATED);
 
     }
-
 
 
 }
