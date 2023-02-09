@@ -2,6 +2,7 @@ package com.fse2.lms;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fse2.lms.controller.UserController;
+import com.fse2.lms.dto.request.LoginUserRequestDto;
 import com.fse2.lms.dto.request.UserRequestDto;
 import com.fse2.lms.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -34,13 +35,21 @@ class LmsSignUpApplicationTests {
 
     private static final UserRequestDto userRequestDto = UserRequestDto.buildUserRequestDtoWith()
             .userEmailId("akhil.nuthakki1@gmail.com")
-            .userName("Akhil Nuthakki")
+            .userName("AkhilNuthakki")
             .password("Pass2022").build();
 
     private static final UserRequestDto invalidUserRequestDto = UserRequestDto.buildUserRequestDtoWith()
             .userEmailId("akhil.nuthakki1@gmail.com")
-            .userName("Akhil Nuthakki")
+            .userName("AkhilNuthakki")
             .password("Pass@2022").build();
+
+    private static final LoginUserRequestDto loginUserRequestDto = LoginUserRequestDto.buildLoginUserRequestDtoWith()
+            .userEmailId("akhil.nuthakki1@gmail.com")
+            .password("Pass2022").build();
+
+    private static final LoginUserRequestDto invalidLoginUserRequestDto = LoginUserRequestDto.buildLoginUserRequestDtoWith()
+            .userEmailId("akhilnuthakki")
+            .password("").build();
 
     @Test
     void userAddedWhenProvidedValidUserDetails() throws Exception {
@@ -60,7 +69,25 @@ class LmsSignUpApplicationTests {
                 .accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
     }
 
-    private static String asJsonString(final UserRequestDto obj) {
+    @Test
+    void userAuthenticatedWhenProvidedValidUserDetails() throws Exception {
+        Mockito.doNothing().when(userService).validateUser(any(LoginUserRequestDto.class));
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/api/v1.0/lms/users/login")
+                .content(asJsonString(loginUserRequestDto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+    }
+
+    @Test
+    void givenInValidUserDetailsForLoginThenReturnBadRequest() throws Exception {
+        Mockito.doNothing().when(userService).validateUser(any(LoginUserRequestDto.class));
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/api/v1.0/lms/users/login")
+                .content(asJsonString(invalidLoginUserRequestDto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+    }
+
+    private static String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString((obj));
         } catch (Exception e) {

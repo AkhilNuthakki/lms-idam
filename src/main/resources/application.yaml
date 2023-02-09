@@ -1,5 +1,5 @@
 server:
-  port: 8091
+  port: 8092
   ssl:
     key-alias: springboot
     key-store: C:\Users\nutha\springboot.p12
