@@ -2,6 +2,7 @@ package com.fse2.lms.controller;
 
 import com.fse2.lms.dto.request.LoginUserRequestDto;
 import com.fse2.lms.dto.request.UserRequestDto;
+import com.fse2.lms.dto.response.LoginUserResponseDto;
 import com.fse2.lms.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -50,9 +51,9 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User doesn't exists", content = {@Content()}),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content()})
     })
-    public ResponseEntity<String> validateUser(@Valid @RequestBody LoginUserRequestDto user) {
-        userService.validateUser(user);
-        return new ResponseEntity<>("User authenticated", HttpStatus.OK);
+    public ResponseEntity<LoginUserResponseDto> validateUser(@Valid @RequestBody LoginUserRequestDto user) {
+
+        return new ResponseEntity<>(userService.validateUser(user), HttpStatus.OK);
 
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fse2.lms.controller.UserController;
 import com.fse2.lms.dto.request.LoginUserRequestDto;
 import com.fse2.lms.dto.request.UserRequestDto;
+import com.fse2.lms.dto.response.LoginUserResponseDto;
 import com.fse2.lms.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -71,7 +73,7 @@ class LmsSignUpApplicationTests {
 
     @Test
     void userAuthenticatedWhenProvidedValidUserDetails() throws Exception {
-        Mockito.doNothing().when(userService).validateUser(any(LoginUserRequestDto.class));
+        when(userService.validateUser(any(LoginUserRequestDto.class))).thenReturn(any(LoginUserResponseDto.class));
         this.mockMvc.perform(MockMvcRequestBuilders.post("/api/v1.0/lms/users/login")
                 .content(asJsonString(loginUserRequestDto))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -80,7 +82,6 @@ class LmsSignUpApplicationTests {
 
     @Test
     void givenInValidUserDetailsForLoginThenReturnBadRequest() throws Exception {
-        Mockito.doNothing().when(userService).validateUser(any(LoginUserRequestDto.class));
         this.mockMvc.perform(MockMvcRequestBuilders.post("/api/v1.0/lms/users/login")
                 .content(asJsonString(invalidLoginUserRequestDto))
                 .contentType(MediaType.APPLICATION_JSON)
